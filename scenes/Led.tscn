@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://scripts/led.gd" type="Script" id=1]
+
+[node name="Led" type="Node2D"]
+
+script/script = ExtResource( 1 )
+color = Color( 1, 0, 0, 255 )
+width = 32
+size = 24
+switched_on = true
+
+[connection signal="draw" from="." to="." method="_on_draw"]
+
+
