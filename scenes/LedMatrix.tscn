@@ -7,7 +7,7 @@
 script/script = ExtResource( 1 )
 rows = 16
 cols = 32
-updates_per_minute = 600
+updates_per_minute = 300
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 

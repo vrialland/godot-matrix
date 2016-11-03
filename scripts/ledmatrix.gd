@@ -17,6 +17,7 @@ func _ready():
 	var led_width = self.window_size.x / self.cols
 	var led_height = self.window_size.y / self.rows
 
+	# Init led grid
 	for col in range(cols):
 		var col_grid = []
 		for row in range(rows):
@@ -29,6 +30,7 @@ func _ready():
 	self.set_process(true)
 
 func _on_draw():
+	# Fill background with black
 	self.draw_rect(Rect2(Vector2(0, 0), self.window_size), Color(0, 0, 0))
 
 func _process(delta):
@@ -38,7 +40,7 @@ func _process(delta):
 		self.animate()
 
 func animate():
-	self.scroll_left()
+	self.horizontal_scroll(true)
 
 func get_led_at(col, row):
 	return self.led_grid[col][row]
@@ -48,24 +50,37 @@ func set_led_state(col, row, color, switched_on=true):
 	led.color = color
 	led.switched_on = switched_on
 	led.update()
-
-func scroll_left():
+		
+func horizontal_scroll(left_to_right=false):
 	var buffer = []
 	var col = 0
 	var row = 0
-
-	# get content of first col in memory
+	
+	if left_to_right:
+		col = self.cols - 1 
+	
+	# get content of first col (right to left) or last one in memory
 	for row in range(self.rows):
 		var led = self.get_led_at(col, row)
 		buffer.append([led.color, led.switched_on])
-
-	# copy col + 1 to col
-	for col in range(self.cols - 1):
-		for row in range(self.rows):
-			var src = self.get_led_at(col + 1, row)
-			self.set_led_state(col, row, src.color, src.switched_on)
-
-	# copy 1st col to last one
-	col = self.cols - 1
+		
+	if left_to_right:
+		# copy col - 1 to col
+		for col in range(self.cols - 1, 0, -1):
+			for row in range(self.rows):
+				var src = self.get_led_at(col - 1, row)
+				self.set_led_state(col, row, src.color, src.switched_on)
+	else:
+		# copy col + 1 to col
+		for col in range(self.cols - 1):
+			for row in range(self.rows):
+				var src = self.get_led_at(col + 1, row)
+				self.set_led_state(col, row, src.color, src.switched_on)
+				
+	# copy 1st col to last one (right to left) or first one
+	if left_to_right:
+		col = 0
+	else:
+		col = self.cols - 1
 	for row in range(self.rows):
 		self.set_led_state(col, row, buffer[row][0], buffer[row][1])
