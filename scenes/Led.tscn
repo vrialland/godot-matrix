@@ -5,10 +5,8 @@
 [node name="Led" type="Node2D"]
 
 script/script = ExtResource( 1 )
-color = Color( 1, 0, 0, 255 )
-width = 32
-size = 24
-switched_on = true
+color = Color( 0, 1, 0, 0.235294 )
+size = 26
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 
