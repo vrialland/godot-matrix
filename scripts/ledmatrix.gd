@@ -61,13 +61,13 @@ func _process(delta):
 	self.elapsed += delta
 	if self.elapsed > 60.0 / self.updates_per_minute:
 		self.elapsed = 0
-		self.horizontal_scroll()
+		self.horizontal_scroll(4, 12)
 
 func set_led_color(col, row, color):
 	var led = self.get_led_at(col, row)
 	led.set_color(color)
 
-func horizontal_scroll(left_to_right=false):
+func horizontal_scroll(start_row=0, end_row=rows, left_to_right=false):
 	var buffer = []
 	var col = 0
 	var row = 0
@@ -76,20 +76,20 @@ func horizontal_scroll(left_to_right=false):
 		col = self.cols - 1
 
 	# get content of first col (right to left) or last one in memory
-	for row in range(self.rows):
+	for row in range(0, self.rows):
 		var led = self.get_led_at(col, row)
 		buffer.append(led.color)
 
 	if left_to_right:
 		# copy col - 1 to col
 		for col in range(self.cols - 1, 0, -1):
-			for row in range(self.rows):
+			for row in range(start_row, end_row):
 				var src = self.get_led_at(col - 1, row)
 				self.get_led_at(col, row).copy(src)
 	else:
 		# copy col + 1 to col
 		for col in range(self.cols - 1):
-			for row in range(self.rows):
+			for row in range(start_row, end_row):
 				var src = self.get_led_at(col + 1, row)
 				self.get_led_at(col, row).copy(src)
 
@@ -98,5 +98,6 @@ func horizontal_scroll(left_to_right=false):
 		col = 0
 	else:
 		col = self.cols - 1
-	for row in range(self.rows):
+
+	for row in range(start_row, end_row):
 		self.get_led_at(col, row).set_color_with_alpha(buffer[row])
