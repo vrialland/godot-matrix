@@ -29,7 +29,7 @@ func _ready():
 	var height = int(self.window_size.y)
 
 	var size = OS.get_window_size()
-	self.window_size = Vector2(int(size[0]), int(size[1]))
+	self.window_size = Vector2(size[0], size[1])
 	var cell_width = self.window_size.x / self.cols
 	var cell_height = self.window_size.y / self.rows
 	var delta_x = null
